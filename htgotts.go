@@ -84,7 +84,7 @@ func (speech *Speech) CreateSpeechBuff(text string, fileName string) (io.Reader,
 // Plays an existent .mp3 file
 func (speech *Speech) PlaySpeechFile(fileName string) error {
 	if speech.Handler == nil {
-		mplayer := handlers.MPlayer{}
+		mplayer := handlers.AFplayer{}
 		return mplayer.Play(fileName)
 	}
 

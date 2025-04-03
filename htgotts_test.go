@@ -14,7 +14,7 @@ func TestSpeech_Speak(t *testing.T) {
 }
 
 func TestSpeech_Speak_MPlayer_Handler(t *testing.T) {
-	speech := Speech{Folder: "audio", Language: voices.English, Handler: &handlers.MPlayer{}}
+	speech := Speech{Folder: "audio", Language: voices.English, Handler: &handlers.AFplayer{}}
 	speech.Speak("Test")
 }
 
