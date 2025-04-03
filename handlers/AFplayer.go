@@ -9,6 +9,6 @@ import (
 type AFplayer struct{}
 
 func (AFplayer *AFplayer) Play(fileName string) error {
-	player := exec.Command("afplayer", fileName)
+	player := exec.Command("afplay", fileName)
 	return player.Run()
 }
