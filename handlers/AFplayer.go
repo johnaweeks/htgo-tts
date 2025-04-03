@@ -9,6 +9,7 @@ import (
 
 type AFplayer struct {
 	Rate float32
+	Pid  int
 }
 
 func (x *AFplayer) Play(fileName string) error {
@@ -16,5 +17,18 @@ func (x *AFplayer) Play(fileName string) error {
 	if x.Rate != 0 {
 		player = exec.Command("afplay", "--rate", fmt.Sprint(x.Rate), fileName)
 	}
-	return player.Run()
+	err := player.Run()
+	x.Pid = player.Process.Pid
+	return err
+}
+
+func (x *AFplayer) Stop() error {
+	if x.Pid != 0 {
+		player := exec.Command("kill", fmt.Sprint(x.Pid))
+		err := player.Run()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
