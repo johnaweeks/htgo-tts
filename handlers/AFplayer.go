@@ -3,12 +3,18 @@
 package handlers
 
 import (
+	"fmt"
 	"os/exec"
 )
 
-type AFplayer struct{}
+type AFplayer struct {
+	Rate float32
+}
 
-func (AFplayer *AFplayer) Play(fileName string) error {
+func (x *AFplayer) Play(fileName string) error {
 	player := exec.Command("afplay", fileName)
+	if x.Rate != 0 {
+		player = exec.Command("afplay", "--rate", fmt.Sprint(x.Rate), fileName)
+	}
 	return player.Run()
 }

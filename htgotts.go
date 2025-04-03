@@ -87,7 +87,6 @@ func (speech *Speech) PlaySpeechFile(fileName string) error {
 		mplayer := handlers.AFplayer{}
 		return mplayer.Play(fileName)
 	}
-
 	return speech.Handler.Play(fileName)
 }
 
