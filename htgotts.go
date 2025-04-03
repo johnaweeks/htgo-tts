@@ -49,27 +49,9 @@ func (speech *Speech) CreateSpeechFile(text string, fileName string) (string, er
 
 // Creates a speech message with a given name
 func (speech *Speech) CreateSpeechBuff(text string, fileName string) (io.Reader, error) {
-	data := []rune(text)
-
-	chunkSize := len(data)
-	if len(data) > 32 {
-		chunkSize = 32
-	}
 
 	urls := make([]string, 0)
-	for prev, i := 0, 0; i < len(data); i++ {
-		if i%chunkSize == 0 && i != 0 {
-			chunk := string(data[prev:i])
-			url := fmt.Sprintf("http://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=%d&client=tw-ob&q=%s&tl=%s", chunkSize, url.QueryEscape(chunk), speech.Language)
-			urls = append(urls, url)
-			prev = i
-		} else if i == len(data)-1 {
-			chunk := string(data[prev:])
-			url := fmt.Sprintf("http://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=%d&client=tw-ob&q=%s&tl=%s", chunkSize, url.QueryEscape(chunk), speech.Language)
-			urls = append(urls, url)
-			prev = i
-		}
-	}
+	urls = append(urls, fmt.Sprintf("http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%s&tl=%s", url.QueryEscape(text), speech.Language))
 
 	buf := new(bytes.Buffer)
 	for _, url := range urls {
@@ -85,7 +67,7 @@ func (speech *Speech) CreateSpeechBuff(text string, fileName string) (io.Reader,
 		r.Body.Close()
 	}
 
-	f := speech.Folder + "/" + fileName + ".mp3"
+	f := speech.Folder + "/" + fileName
 	output, err := os.Create(f)
 	if err != nil {
 		return nil, err
@@ -166,7 +148,7 @@ func (speech *Speech) downloadIfNotExists(fileName string, text string) error {
 
 func (speech *Speech) generateHashName(name string) string {
 	hash := md5.Sum([]byte(name))
-	return fmt.Sprintf("%s_%s", speech.Language, hex.EncodeToString(hash[:]))
+	return fmt.Sprintf("%s_%s.mp3", speech.Language, hex.EncodeToString(hash[:]))
 }
 
 func (speech *Speech) urlResponse(dlUrl string) (resp *http.Response, err error) {
