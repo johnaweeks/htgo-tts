@@ -12,7 +12,7 @@ import (
 func (x *AFplayer) Play(fileName string) error {
 	player := exec.Command("ffplay.exe", fileName)
 	if x.Rate != 0 {
-		player = exec.Command("ffplay.exe", "-af", fmt.Sprint("atempo=", x.Rate), fileName)
+		player = exec.Command("ffplay.exe", "-af", fmt.Sprint("atempo=", x.Rate), fileName, "-nodisp", "-autoexit")
 	}
 	err := player.Run()
 	x.Pid = player.Process.Pid
