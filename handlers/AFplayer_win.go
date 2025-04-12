@@ -6,11 +6,13 @@ package handlers
 import (
 	"fmt"
 	"os/exec"
+	"syscall"
 )
 
 // -af "atempo=2"
 func (x *AFplayer) Play(fileName string) error {
 	player := exec.Command("ffplay.exe", fileName)
+	player.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	if x.Rate != 0 {
 		player = exec.Command("ffplay.exe", "-af", fmt.Sprint("atempo=", x.Rate), fileName, "-nodisp", "-autoexit")
 	}
